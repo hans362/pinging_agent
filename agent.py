@@ -28,10 +28,10 @@ def GetNodeList(apiEndpoint, secret):
         return None
 
 
-def RegisterRecord(apiEndpoint, secret, agentId, nodeId, lantency):
+def RegisterRecord(apiEndpoint, secret, agentId, nodeId, latency):
     try:
         response = requests.get(apiEndpoint + '/registerRecord?secret=' +
-                                secret+'&agentId='+agentId+'&nodeId='+nodeId+'&lantency='+lantency)
+                                secret+'&agentId='+agentId+'&nodeId='+nodeId+'&latency='+latency)
         if not response.status_code == 200:
             raise Exception('Error registering record')
     except Exception as e:
@@ -62,10 +62,10 @@ if nodeList == None:
 # Ping nodes
 for node in nodeList:
     print('Pinging ' + node['hostname'])
-    lantency = ping(node['hostname'], unit='ms')
-    if lantency == None or lantency == False:
-        lantency = -1
-    lantency = int(lantency)
-    print('Lantency: ' + str(lantency))
+    latency = ping(node['hostname'], unit='ms')
+    if latency == None or latency == False:
+        latency = -1
+    latency = int(latency)
+    print('latency: ' + str(latency))
     RegisterRecord(args.apiEndpoint, args.secret,
-                   str(agentId), str(node['id']), str(lantency))
+                   str(agentId), str(node['id']), str(latency))
