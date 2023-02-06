@@ -38,7 +38,7 @@ def RegisterRecord(apiEndpoint, secret, agentId, nodeId, latency, loss):
         print(e)
 
 
-def PingNode(hostname, count=4, unit='ms'):
+def PingNode(hostname, count=20, unit='ms'):
     sum = 0
     times = count
     for i in range(count):
@@ -59,7 +59,7 @@ parser.add_argument('-a', '--apiEndpoint',
                     help='API Endpoint URL. eg. https://pinging.vercel.app/api', required=True)
 parser.add_argument(
     '-s', '--secret', help='Agent Secret. eg. 9cWxVbX35UL2Dhj4', required=True)
-parser.add_argument('-n', '--name', help='Agent Friendly Name', required=True)
+parser.add_argument('-n', '--name', help='Agent Friendly Name. eg. 0vv0', required=True)
 args = parser.parse_args()
 
 # Register agent
