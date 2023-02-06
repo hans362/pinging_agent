@@ -38,6 +38,21 @@ def RegisterRecord(apiEndpoint, secret, agentId, nodeId, latency):
         print(e)
 
 
+def PingNode(hostname, count=4, unit='ms'):
+    sum = 0
+    times = count
+    for i in range(count):
+        latency = ping(hostname, unit=unit)
+        if latency != None and latency != False:
+            sum += latency
+        else:
+            times -= 1
+    if times == 0:
+        return None, 1.00
+    else:
+        return round(sum/times, 2), round((count-times)/count, 2)
+
+
 # Accept args from command line
 parser = argparse.ArgumentParser()
 parser.add_argument('-a', '--apiEndpoint',
@@ -62,10 +77,10 @@ if nodeList == None:
 # Ping nodes
 for node in nodeList:
     print('Pinging ' + node['hostname'])
-    latency = ping(node['hostname'], unit='ms')
-    if latency == None or latency == False:
+    latency, loss = PingNode(node['hostname'])
+    if latency == None:
         latency = -1
-    latency = int(latency)
     print('latency: ' + str(latency))
+    print('loss: ' + str(loss))
     RegisterRecord(args.apiEndpoint, args.secret,
-                   str(agentId), str(node['id']), str(latency))
+                   str(agentId), str(node['id']), str(latency), str(loss))
